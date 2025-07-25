@@ -34,6 +34,10 @@ export default function LoginHome() {
 
   const handleSubmitLogin = async (values: FormValues) => {
     setLoading(true);
+    router.push("/qrcode");
+    setLoading(false);
+
+    return;
     try {
       const res = await axiosProvider.post("/login", {
         email: values.email,

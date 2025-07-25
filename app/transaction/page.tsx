@@ -14,8 +14,6 @@ import { Tooltip } from "react-tooltip";
 import { FaEllipsisVertical } from "react-icons/fa6";
 import { useAuthRedirect } from "../component/hooks/useAuthRedirect";
 
-const axiosProvider = new AxiosProvider();
-
 interface Tab {
   label: string;
   content: JSX.Element;
@@ -37,44 +35,15 @@ export default function Home() {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
-  const fetchData = async () => {
-    setIsLoading(true);
-    // setIsFilter(false);
-    try {
-      const response = await axiosProvider.get(
-        `/getalltransaction?page=${page}&limit=${limit}`
-      );
-      // console.log('transactoin data',response.data.data.transactions);
-      setTotalPages(response.data.data.totalPages);
-      const result = response.data.data.transactions;
-      setData(result);
-    } catch (error: any) {
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  useEffect(() => {
-    fetchData();
-  }, [page]);
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, [page]);
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
       setPage(newPage);
     }
   };
-  if (isChecking) {
-    return (
-      <div className="h-screen flex flex-col gap-5 justify-center items-center bg-white">
-        <Image
-          src="/images/orizonIcon.svg"
-          alt="Loading"
-          width={150}
-          height={150}
-          className="animate-pulse rounded"
-        />
-      </div>
-    );
-  }
   if (isLoading) {
     return (
       <div className="h-screen flex flex-col gap-5 justify-center items-center">
@@ -162,80 +131,137 @@ export default function Home() {
                 </tr>
               </thead>
               <tbody>
-                {isError ? (
-                  <tr>
-                    <td colSpan={6} className="text-center text-xl mt-5">
-                      <div className="mt-5">Data not found</div>
-                    </td>
-                  </tr>
-                ) : (
-                  data.map((item, index) => (
-                    <tr
-                      className="border border-tableBorder bg-white hover:bg-primary-100"
-                      key={index}
-                    >
-                      <td className="p-4  flex items-center gap-2">
-                        <div className="md:hidden">
-                          <FaEllipsisVertical
-                            data-tooltip-id="my-tooltip"
-                            data-tooltip-html={`<div>
-                                  <strong>Description:</strong> <span style="text-transform: capitalize;">${item.description}</span><br/>
-                                  <strong>Transaction id:</strong> ${item.transaction_id}<br/>
-                                   <strong>Type:</strong> ${item.type}<br/>
-                                    <strong>Card:</strong> ${item.card}<br/>
-                                   <strong>Date:</strong> ${item.date}<br/>
-                                   <strong>Amount:</strong> ${item.amount}<br/>
-                                </div>`}
-                            className="text-black leading-normal capitalize"
-                          />
-                          <Tooltip id="my-tooltip" place="right" float />
-                        </div>
-                        <div>
-                          <p className="text-[#232323] text-base leading-normal">
-                            {item.description}
-                          </p>
-                        </div>
-                      </td>
-                      <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
-                        <p className="text-[#232323] text-base leading-normal">
-                          {item.transaction_id}
-                        </p>
-                      </td>
-                      <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
-                        <p className="text-[#232323] text-base leading-normal">
-                          {item.type}
-                        </p>
-                      </td>
-                      <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
-                        <div className="flex gap-1.5">
-                          <p className="text-[#232323] text-base leading-normal">
-                            {item.card}
-                          </p>
-                        </div>
-                      </td>
-                      <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
-                        <div className="flex gap-1.5">
-                          <p className="text-[#232323] text-base leading-normal">
-                            {item.date}
-                          </p>
-                        </div>
-                      </td>
-                      <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
-                        <div className="flex gap-1.5">
-                          {item.type === "credit" ? (
-                            <p className="text-green-500 text-base font-medium leading-normal">
-                              {item.amount}
-                            </p>
-                          ) : (
-                            <p className="text-[#FE5C73] text-base font-medium leading-normal">
-                              {item.amount}
-                            </p>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
+                <tr className="border border-tableBorder bg-white hover:bg-primary-100">
+                  <td className="p-4 flex items-center gap-2">
+                    <p className="text-[#232323] text-base leading-normal">
+                      Grocery Purchase
+                    </p>
+                  </td>
+                  <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                    <p className="text-[#232323] text-base leading-normal">
+                      TXN123456
+                    </p>
+                  </td>
+                  <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                    <p className="text-[#232323] text-base leading-normal">
+                      debit
+                    </p>
+                  </td>
+                  <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                    <p className="text-[#232323] text-base leading-normal">
+                      **** 1234
+                    </p>
+                  </td>
+                  <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                    <p className="text-[#232323] text-base leading-normal">
+                      2025-07-25
+                    </p>
+                  </td>
+                  <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                    <p className="text-[#FE5C73] text-base font-medium leading-normal">
+                      ₹500.00
+                    </p>
+                  </td>
+                </tr>
+
+                <tr className="border border-tableBorder bg-white hover:bg-primary-100">
+                  <td className="p-4 flex items-center gap-2">
+                    <p className="text-[#232323] text-base leading-normal">
+                      Salary Credit
+                    </p>
+                  </td>
+                  <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                    <p className="text-[#232323] text-base leading-normal">
+                      TXN789012
+                    </p>
+                  </td>
+                  <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                    <p className="text-[#232323] text-base leading-normal">
+                      credit
+                    </p>
+                  </td>
+                  <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                    <p className="text-[#232323] text-base leading-normal">
+                      **** 5678
+                    </p>
+                  </td>
+                  <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                    <p className="text-[#232323] text-base leading-normal">
+                      2025-07-24
+                    </p>
+                  </td>
+                  <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                    <p className="text-green-500 text-base font-medium leading-normal">
+                      ₹25,000.00
+                    </p>
+                  </td>
+                </tr>
+
+                <tr className="border border-tableBorder bg-white hover:bg-primary-100">
+                  <td className="p-4 flex items-center gap-2">
+                    <p className="text-[#232323] text-base leading-normal">
+                      Mobile Recharge
+                    </p>
+                  </td>
+                  <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                    <p className="text-[#232323] text-base leading-normal">
+                      TXN345678
+                    </p>
+                  </td>
+                  <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                    <p className="text-[#232323] text-base leading-normal">
+                      debit
+                    </p>
+                  </td>
+                  <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                    <p className="text-[#232323] text-base leading-normal">
+                      **** 9101
+                    </p>
+                  </td>
+                  <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                    <p className="text-[#232323] text-base leading-normal">
+                      2025-07-23
+                    </p>
+                  </td>
+                  <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                    <p className="text-[#FE5C73] text-base font-medium leading-normal">
+                      ₹299.00
+                    </p>
+                  </td>
+                </tr>
+
+                <tr className="border border-tableBorder bg-white hover:bg-primary-100">
+                  <td className="p-4 flex items-center gap-2">
+                    <p className="text-[#232323] text-base leading-normal">
+                      Cashback
+                    </p>
+                  </td>
+                  <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                    <p className="text-[#232323] text-base leading-normal">
+                      TXN654321
+                    </p>
+                  </td>
+                  <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                    <p className="text-[#232323] text-base leading-normal">
+                      credit
+                    </p>
+                  </td>
+                  <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                    <p className="text-[#232323] text-base leading-normal">
+                      **** 1122
+                    </p>
+                  </td>
+                  <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                    <p className="text-[#232323] text-base leading-normal">
+                      2025-07-22
+                    </p>
+                  </td>
+                  <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                    <p className="text-green-500 text-base font-medium leading-normal">
+                      ₹150.00
+                    </p>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>

@@ -102,9 +102,9 @@ export default class AxiosProvider {
 
   private handleError(error: any): Promise<never> {
     console.error("Error:", error);
-    if (error.response?.status === 401 && !isServer) {
-      window.location.href = "/";
-    }
+    // if (error.response?.status === 401 && !isServer) {
+    //   window.location.href = "/";
+    // }
     return Promise.reject(error);
   }
 }

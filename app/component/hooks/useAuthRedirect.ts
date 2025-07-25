@@ -13,7 +13,6 @@ export const useAuthRedirect = (): boolean => {
 
     if (!token || token === 'null' || token.trim() === '' || isTokenExpired(token)) {
       localStorage.clear();
-      router.replace('/');
     } else {
       setChecking(false); // ✅ Only mark done if valid
     }

@@ -231,19 +231,7 @@ export default function Home() {
       }
     });
   };
-  if (isChecking) {
-    return (
-      <div className="h-screen flex flex-col gap-5 justify-center items-center bg-white">
-        <Image
-          src="/images/orizonIcon.svg"
-          alt="Loading"
-          width={150}
-          height={150}
-          className="animate-pulse rounded"
-        />
-      </div>
-    );
-  }
+
   if (isLoading) {
     return (
       <div className="h-screen flex flex-col gap-5 justify-center items-center">
