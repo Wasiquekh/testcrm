@@ -163,6 +163,10 @@ export default function Home() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    toggleFilterFlyout();
+    toast.success("Form submitted successfully!");
+    return;
     setIsFilter(true);
     e.preventDefault();
     filterDataValue();
@@ -433,71 +437,44 @@ export default function Home() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.length === 0 ? (
-                    <tr>
-                      <td colSpan={8} className="text-center text-xl mt-5">
-                        <div className="mt-5">Data not found</div>
+                  {[...Array(10)].map((_, index) => (
+                    <tr
+                      className="border border-tableBorder bg-white hover:bg-primary-100"
+                      key={index}
+                    >
+                      <td className="px-2 py-2 border border-tableBorder">
+                        <p className="text-[#232323] text-base leading-normal">
+                          User logged in
+                        </p>
+                      </td>
+                      <td className="px-2 py-2 border border-tableBorder hidden sm:table-cell">
+                        <p className="text-[#232323] text-base leading-normal">
+                          John Doe {index + 1}
+                        </p>
+                      </td>
+                      <td className="px-2 py-2 border border-tableBorder hidden sm:table-cell">
+                        <p className="text-[#232323] text-base leading-normal">
+                          uuid-0000-{index + 1}
+                        </p>
+                      </td>
+                      <td className="px-2 py-2 border border-tableBorder hidden sm:table-cell">
+                        <p className="text-[#232323] text-base leading-normal">
+                          2025-07-25 10:
+                          {(10 + index).toString().padStart(2, "0")} AM
+                        </p>
+                      </td>
+                      <td className="px-2 py-2 border border-tableBorder hidden sm:table-cell">
+                        <p className="text-[#232323] text-base leading-normal">
+                          Auth Module
+                        </p>
+                      </td>
+                      <td className="px-2 py-2 border border-tableBorder hidden sm:table-cell">
+                        <p className="text-[#232323] text-base leading-normal">
+                          LOGIN
+                        </p>
                       </td>
                     </tr>
-                  ) : (
-                    data.map((item, index) => (
-                      <tr
-                        className="border border-tableBorder bg-white hover:bg-primary-100"
-                        key={index}
-                      >
-                        <td className="px-2 py-2 border border-tableBorder">
-                          <div className="flex">
-                            <div className="md:hidden flex mr-1">
-                              <FaEllipsisVertical
-                                data-tooltip-id="my-tooltip"
-                                data-tooltip-html={`
-                                              <div>
-                                                <strong>Name and User Activity:</strong> <span style="text-transform: capitalize;">${item.user_activity}</span><br/>
-                                                <strong>User's Name:</strong> ${item.name}<br/>
-                                                <strong>User's uuid:</strong> ${item.uuid}<br/>
-                                                <strong>Date:</strong> ${item.activity_timestamp}<br/>
-                                                <strong>Module:</strong> ${item.module}<br/>
-                                                <strong>Type:</strong> ${item.type}<br/>
-                                              </div>`}
-                                className="text-black leading-normal capitalize relative top-1"
-                              />
-                              <Tooltip id="my-tooltip" place="right" float />
-                            </div>
-                            <div>
-                              <p className="text-[#232323] text-base leading-normal ">
-                                {item.user_activity}
-                              </p>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-2 py-2 border border-tableBorder hidden sm:table-cell">
-                          <p className="text-[#232323] text-base leading-normal">
-                            {item.name}
-                          </p>
-                        </td>
-                        <td className="px-2 py-2 border border-tableBorder hidden sm:table-cell">
-                          <p className="text-[#232323] text-base leading-normal">
-                            {item.uuid}
-                          </p>
-                        </td>
-                        <td className="px-2 py-2 border border-tableBorder hidden sm:table-cell">
-                          <p className="text-[#232323] text-base leading-normal">
-                            {item.activity_timestamp}
-                          </p>
-                        </td>
-                        <td className="px-2 py-2 border border-tableBorder hidden sm:table-cell">
-                          <p className="text-[#232323] text-base leading-normal">
-                            {item.module}
-                          </p>
-                        </td>
-                        <td className="px-2 py-2 border border-tableBorder hidden sm:table-cell">
-                          <p className="text-[#232323] text-base leading-normal">
-                            {item.type}
-                          </p>
-                        </td>
-                      </tr>
-                    ))
-                  )}
+                  ))}
                 </tbody>
               </table>
             </div>

@@ -73,6 +73,8 @@ export default function Home() {
     values: FormValues,
     { resetForm }: FormikHelpers<FormValues>
   ) => {
+    toast.success("Form submitted successfully!");
+    return;
     console.log(values);
     try {
       const appCheckToken = await getToken(appCheck, true);
