@@ -246,7 +246,6 @@ export default function Home() {
       .typeError("Must be a number")
       .positive()
       .required("USD price is required"),
-    product_category: Yup.string().required("Category is required"),
   });
 
   const initialValues: ProductFormValues = {
@@ -273,6 +272,9 @@ export default function Home() {
     values: ProductFormValues,
     actions: FormikHelpers<ProductFormValues>
   ) => {
+    toast.success("Product added");
+    setFlyoutOpen(false);
+    return;
     // console.log("Submitted:", values);
     actions.setSubmitting(true); // Optional: show loading state while submitting
 
@@ -415,97 +417,72 @@ export default function Home() {
                 </tr>
               </thead>
               <tbody>
-                {isError ? (
-                  <tr>
-                    <td colSpan={6} className="text-center text-xl mt-5">
-                      <div className="mt-5">Data not found</div>
+                {[...Array(5)].map((_, index) => (
+                  <tr
+                    className="border border-tableBorder bg-white hover:bg-primary-100"
+                    key={index}
+                  >
+                    <td className="p-4 flex items-center gap-2">
+                      <p className="text-[#232323] text-base leading-normal">
+                        Product {index + 1}
+                      </p>
+                    </td>
+                    <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                      <p className="text-[#232323] text-base leading-normal">
+                        Sample description {index + 1}
+                      </p>
+                    </td>
+                    <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                      <p className="text-[#232323] text-base leading-normal">
+                        ₹{(index + 1) * 100}
+                      </p>
+                    </td>
+                    <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                      <div className="flex gap-1.5">
+                        <p className="text-[#232323] text-base leading-normal">
+                          Category {index + 1}
+                        </p>
+                      </div>
+                    </td>
+                    <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                      <div className="flex gap-1.5">
+                        <p className="text-[#232323] text-base leading-normal">
+                          INR
+                        </p>
+                      </div>
+                    </td>
+                    <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
+                      <div className="flex gap-1.5">
+                        <p className="text-[#232323] text-base leading-normal">
+                          Admin {index + 1}
+                        </p>
+                      </div>
+                    </td>
+                    <td className="px-2 py-1 border border-tableBorder">
+                      <div className="flex gap-1 md:gap-2 justify-center md:justify-start">
+                        {/* View Button (no onClick, just styling) */}
+                        <button
+                          type="button"
+                          className="py-[4px] px-3 bg-primary-600 hover:bg-primary-800 active:bg-primary-900 group flex gap-1 items-center rounded-xl text-xs md:text-sm"
+                        >
+                          <MdRemoveRedEye className="text-white w-4 h-4 group-hover:text-white" />
+                          <p className="text-white hidden md:block group-hover:text-white">
+                            View
+                          </p>
+                        </button>
+
+                        {/* Delete Button (no onClick, just styling) */}
+                        <button
+                          type="button"
+                          className="py-[4px] px-3 bg-black flex gap-1 items-center rounded-full text-xs md:text-sm group hover:bg-primary-600"
+                        >
+                          <RiDeleteBin6Line className="text-white w-4 h-4" />
+                          <p className="text-white hidden md:block">Delete</p>
+                        </button>
+                      </div>
                     </td>
                   </tr>
-                ) : (
-                  data.map((item, index) => (
-                    <tr
-                      className="border border-tableBorder bg-white hover:bg-primary-100"
-                      key={index}
-                    >
-                      <td className="p-4  flex items-center gap-2">
-                        <div className="md:hidden">
-                          <FaEllipsisVertical
-                            data-tooltip-id="my-tooltip"
-                            data-tooltip-html={`<div>
-                                  <strong>Description:</strong> <span style="text-transform: capitalize;">${item.name}</span><br/>
-                                  <strong>Transaction id:</strong> ${item.description}<br/>
-                                  <strong>Type:</strong> ${item.price}<br/>
-                                  <strong>Card:</strong> ${item.category_name}<br/>
-                                  <strong>Date:</strong> ${item.currency}<br/>
-                                  <strong>Date:</strong> ${item.created_by_name}<br/> 
-                                </div>`}
-                            className="text-black leading-normal capitalize"
-                          />
-                          <Tooltip id="my-tooltip" place="right" float />
-                        </div>
-                        <div>
-                          <p className="text-[#232323] text-base leading-normal">
-                            {item.name}
-                          </p>
-                        </div>
-                      </td>
-                      <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
-                        <p className="text-[#232323] text-base leading-normal">
-                          {item.description}
-                        </p>
-                      </td>
-                      <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
-                        <p className="text-[#232323] text-base leading-normal">
-                          {item.price}
-                        </p>
-                      </td>
-                      <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
-                        <div className="flex gap-1.5">
-                          <p className="text-[#232323] text-base leading-normal">
-                            {item.category_name}
-                          </p>
-                        </div>
-                      </td>
-                      <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
-                        <div className="flex gap-1.5">
-                          <p className="text-[#232323] text-base leading-normal">
-                            {item.currency}
-                          </p>
-                        </div>
-                      </td>
-                      <td className="px-2 py-0 border border-tableBorder hidden md:table-cell">
-                        <div className="flex gap-1.5">
-                          <p className="text-[#232323] text-base leading-normal">
-                            {item.created_by_name}
-                          </p>
-                        </div>
-                      </td>
-                      <td className="px-2 py-1 border border-tableBorder">
-                        <div className="flex gap-1 md:gap-2 justify-center md:justify-start">
-                          {/* View Button */}
-                          <button
-                            onClick={() => openEditFlyout(item)}
-                            className="py-[4px] px-3 bg-primary-600 hover:bg-primary-800 active:bg-primary-900 group flex gap-1 items-center rounded-xl text-xs md:text-sm"
-                          >
-                            <MdRemoveRedEye className="text-white w-4 h-4 group-hover:text-white" />
-                            <p className="text-white hidden md:block group-hover:text-white">
-                              View
-                            </p>
-                          </button>
-
-                          {/* Delete Button */}
-                          <button
-                            onClick={() => deleteUserData(item)}
-                            className="py-[4px] px-3 bg-black flex gap-1 items-center rounded-full text-xs md:text-sm group hover:bg-primary-600"
-                          >
-                            <RiDeleteBin6Line className="text-white w-4 h-4" />
-                            <p className="text-white hidden md:block">Delete</p>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
+                ))}
               </tbody>
             </table>
           </div>
