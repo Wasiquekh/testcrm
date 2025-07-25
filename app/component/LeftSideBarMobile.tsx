@@ -2,12 +2,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import {
-  MdOutlinePeopleOutline,
-  MdOutlineSwitchAccount,
   MdOutlineDashboard,
+  MdOutlineSwitchAccount,
   MdCategory,
 } from "react-icons/md";
-import { BiSolidHome, BiSolidUser } from "react-icons/bi";
+import { BiSolidUser } from "react-icons/bi";
 import { TbDeviceMobileDollar } from "react-icons/tb";
 import { HiWrenchScrewdriver } from "react-icons/hi2";
 import { FaMoneyCheckDollar } from "react-icons/fa6";
@@ -21,19 +20,14 @@ import { FaChevronDown } from "react-icons/fa";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import StorageManager from "../../provider/StorageManager";
-import AxiosProvider from "../../provider/AxiosProvider";
 
-const axiosProvider = new AxiosProvider();
 const storage = new StorageManager();
 
-const LeftSideBarMobile: React.FC = () => {
+const LeftSideBar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const permissions = storage.getUserPermissions();
 
-  const hasCustomerView = permissions?.some(
-    (perm) => perm.name === "customer.view"
-  );
   const hasSystemUserView = permissions?.some(
     (perm) => perm.name === "systemuser.view"
   );
@@ -51,18 +45,11 @@ const LeftSideBarMobile: React.FC = () => {
   ];
 
   const isCRMActive = crmPaths.includes(pathname);
-  const [isSubmenuOpen, setIsSubmenuOpen] = useState<boolean>(isCRMActive);
-
+  const [isSubmenuOpen, setIsSubmenuOpen] = useState(isCRMActive);
   const toggleSubmenu = () => setIsSubmenuOpen((prev) => !prev);
 
-  const handleLogout = async () => {
-    try {
-      const response = await axiosProvider.post("/logout", {});
-      localStorage.clear();
-      window.location.href = "/";
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+  const handleLogout = () => {
+    router.push("/");
   };
 
   return (
@@ -86,76 +73,65 @@ const LeftSideBarMobile: React.FC = () => {
         <SidebarItem
           href="/dashboard"
           label="Dashboard"
-          icon={<BiSolidHome />}
+          icon={<MdOutlineDashboard />}
           pathname={pathname}
         />
-        {hasCustomerView && (
-          <SidebarItem
-            href="/customer"
-            label="Customers"
-            icon={<MdOutlinePeopleOutline />}
-            pathname={pathname}
-          />
-        )}
 
-        {hasCustomerView && (
-          <>
-            <div
-              onClick={toggleSubmenu}
-              className={`mb-2 flex items-center gap-4 px-3 py-3 cursor-pointer rounded-[4px] ${
-                isCRMActive
-                  ? "bg-primary-600 text-white"
-                  : "text-firstBlack hover:bg-sideBarHoverbg active:bg-sideBarHoverbgPressed hover:text-primary-600"
-              }`}
-            >
-              <div className="w-6 h-6 flex items-center justify-center">
-                <AiOutlineDashboard className="w-6 h-6" />
-              </div>
-              <p className="text-base font-medium leading-none">CRM</p>
-              <FaChevronDown className="ml-auto" />
-            </div>
+        {/* CRM Submenu */}
+        <div
+          onClick={toggleSubmenu}
+          className={`mb-2 flex items-center gap-4 px-3 py-3 cursor-pointer rounded-[4px] ${
+            isCRMActive
+              ? "bg-primary-600 text-white"
+              : "text-firstBlack hover:bg-sideBarHoverbg active:bg-sideBarHoverbgPressed hover:text-primary-600"
+          }`}
+        >
+          <div className="w-6 h-6 flex items-center justify-center">
+            <AiOutlineDashboard className="w-6 h-6" />
+          </div>
+          <p className="text-base font-medium leading-none">CRM</p>
+          <FaChevronDown className="ml-auto" />
+        </div>
 
-            {isSubmenuOpen && (
-              <div className="pl-6">
-                <SidebarItem
-                  href="/crm/total-accounts"
-                  label="Accounts"
-                  icon={<MdOutlineSwitchAccount />}
-                  pathname={pathname}
-                />
-                <SidebarItem
-                  href="/crm/total-contacts"
-                  label="Contacts"
-                  icon={<RiContactsBook3Fill />}
-                  pathname={pathname}
-                />
-                <SidebarItem
-                  href="/crm/total-leads"
-                  label="Leads"
-                  icon={<SiGoogleadsense />}
-                  pathname={pathname}
-                />
-                <SidebarItem
-                  href="/crm/total-quotes"
-                  label="Quotes"
-                  icon={<ImQuotesLeft />}
-                  pathname={pathname}
-                />
-                <SidebarItem
-                  href="/crm/get-product"
-                  label="Products"
-                  icon={<AiFillProduct />}
-                  pathname={pathname}
-                />
-                <SidebarItem
-                  href="/crm/get-category"
-                  label="Product Category"
-                  icon={<MdCategory />}
-                  pathname={pathname}
-                />
-              </div>
-            )}
-          </>
+        {isSubmenuOpen && (
+          <div className="pl-6">
+            <SidebarItem
+              href="/crm/total-accounts"
+              label="Accounts"
+              icon={<MdOutlineSwitchAccount />}
+              pathname={pathname}
+            />
+            <SidebarItem
+              href="/crm/total-contacts"
+              label="Contacts"
+              icon={<RiContactsBook3Fill />}
+              pathname={pathname}
+            />
+            <SidebarItem
+              href="/crm/total-leads"
+              label="Leads"
+              icon={<SiGoogleadsense />}
+              pathname={pathname}
+            />
+            <SidebarItem
+              href="/crm/total-quotes"
+              label="Quotes"
+              icon={<ImQuotesLeft />}
+              pathname={pathname}
+            />
+            <SidebarItem
+              href="/crm/get-product"
+              label="Products"
+              icon={<AiFillProduct />}
+              pathname={pathname}
+            />
+            <SidebarItem
+              href="/crm/get-category"
+              label="Product Category"
+              icon={<MdCategory />}
+              pathname={pathname}
+            />
+          </div>
         )}
 
         <SidebarItem
@@ -226,7 +202,6 @@ const LeftSideBarMobile: React.FC = () => {
   );
 };
 
-// ✅ Updated SidebarItem with vertical centering and padding
 const SidebarItem = ({
   href,
   label,
@@ -256,4 +231,4 @@ const SidebarItem = ({
   );
 };
 
-export default LeftSideBarMobile;
+export default LeftSideBar;
